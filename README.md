@@ -1,69 +1,124 @@
-# Challenge-java
+# Challenge Java
 
-# Forum Hub API
+![Java](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.5-6DB33F?logo=springboot&logoColor=white)
+![Security](https://img.shields.io/badge/Auth-JWT-0a7ea4)
+![Banco](https://img.shields.io/badge/MySQL-8+-4479A1?logo=mysql&logoColor=white)
 
-API REST desenvolvida para gerenciar tópicos de um fórum, permitindo operações CRUD completas com autenticação e autorização.
+## Forum Hub API
 
-## Descrição do Projeto
+API REST em Java com Spring Boot para gerenciamento de tópicos de fórum, com autenticação JWT, controle de acesso, paginação, validação e documentação OpenAPI.
 
-Forum Hub é uma API REST que simula o back-end de um fórum online. A aplicação permite criar, listar, atualizar e deletar tópicos, além de implementar um sistema robusto de autenticação e autorização usando JWT. Todos os endpoints são documentados via Swagger/OpenAPI.
+O repositório agora inclui uma base executável de MVP, em vez de apenas descrever o projeto.
+
+## Visão Geral
+
+O objetivo do projeto é simular o backend de uma plataforma de fórum onde usuários autenticados podem:
+
+- criar tópicos;
+- listar tópicos com paginação;
+- visualizar um tópico específico;
+- atualizar seus próprios tópicos;
+- excluir seus próprios tópicos;
+- autenticar via JWT para consumir endpoints protegidos.
 
 ## Funcionalidades
 
-- Cadastro e autenticação de usuários com JWT
+- Cadastro de usuários
+- Login com geração de token JWT
 - CRUD completo de tópicos
-- Validação de dados de entrada
-- Paginação e ordenação de resultados
+- Proteção de rotas com Spring Security
+- Validação de payloads com Bean Validation
+- Paginação e ordenação
+- Migrações com Flyway
+- Documentação Swagger/OpenAPI
 - Tratamento global de exceções
-- Documentação interativa da API
-- Testes automatizados
 
-## Tecnologias Utilizadas
+## Stack Utilizada
 
 - Java 17
-- Spring Boot 3.2.0
-- Spring Security
+- Spring Boot
+- Spring Web
 - Spring Data JPA
-- MySQL 8.0
-- Flyway Migration
-- JWT (JSON Web Token)
-- Bean Validation
-- Lombok
-- SpringDoc OpenAPI (Swagger)
-- JUnit 5 e Mockito
+- Spring Security
+- MySQL
+- Flyway
+- JWT
+- SpringDoc OpenAPI
+- Maven
 
-## Requisitos
+## Fluxo da Aplicação
 
-- JDK 17 ou superior
-- Maven 3.9+
-- MySQL 8.0
-- IDE de sua preferência (IntelliJ IDEA, Eclipse, VS Code)
+```text
+Cliente envia cadastro ou login
+-> API valida os dados
+-> usuário é persistido ou autenticado
+-> JWT é gerado
+-> cliente envia token nas rotas protegidas
+-> API identifica o usuário autenticado
+-> tópicos são criados, consultados, atualizados ou removidos
+```
 
-## Configuração do Ambiente
+## Estrutura do Projeto
+
+```text
+.
+├── pom.xml
+├── README.md
+└── src
+    └── main
+        ├── java
+        │   └── br/com/vicfmartins/forumhub
+        │       ├── config
+        │       ├── controller
+        │       ├── domain
+        │       ├── dto
+        │       ├── exception
+        │       ├── repository
+        │       ├── security
+        │       ├── service
+        │       └── ForumHubApplication.java
+        └── resources
+            ├── application.properties
+            ├── application-example.properties
+            └── db/migration
+```
+
+## Como Executar
 
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/seu-usuario/forum-hub.git
-cd forum-hub
+git clone https://github.com/VicFmartins/Challenge-java.git
+cd Challenge-java
 ```
 
-### 2. Configure o banco de dados
-
-Crie um banco de dados MySQL:
+### 2. Crie o banco no MySQL
 
 ```sql
 CREATE DATABASE forum_hub;
 ```
 
-### 3. Configure as variáveis de ambiente
+### 3. Configure as credenciais
 
-Edite o arquivo `src/main/resources/application.properties`:
+Você pode configurar por variáveis de ambiente:
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/forum_hub
-spring.datasource.username=seu_usuario
-spring.datasource.password=sua_senha
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+- `JWT_SECRET`
+- `JWT_EXPIRATION_MS`
+
+Ou copiar o arquivo exemplo:
+
+```bash
+cp src/main/resources/application-example.properties src/main/resources/application-local.properties
+```
+
+No PowerShell:
+
+```powershell
+Copy-Item src/main/resources/application-example.properties src/main/resources/application-local.properties
 ```
 
 ### 4. Execute a aplicação
@@ -72,67 +127,75 @@ spring.datasource.password=sua_senha
 mvn spring-boot:run
 ```
 
-A API estará disponível em `http://localhost:8080`
+API padrão:
 
-## Documentação da API
+- `http://localhost:8080`
 
-Acesse a documentação interativa em: `http://localhost:8080/swagger-ui.html`
+Swagger UI:
 
-### Endpoints Principais
+- `http://localhost:8080/swagger-ui/index.html`
 
-#### Autenticação
+## Endpoints Principais
 
-- `POST /auth/register` - Cadastrar novo usuário
-- `POST /auth/login` - Realizar login e obter token JWT
+### Autenticação
 
-#### Tópicos
+- `POST /auth/register`
+- `POST /auth/login`
 
-- `POST /topicos` - Criar novo tópico
-- `GET /topicos` - Listar todos os tópicos (paginado)
-- `GET /topicos/{id}` - Buscar tópico específico
-- `PUT /topicos/{id}` - Atualizar tópico
-- `DELETE /topicos/{id}` - Deletar tópico
+### Tópicos
 
-## Estrutura do Projeto
+- `POST /topicos`
+- `GET /topicos`
+- `GET /topicos/{id}`
+- `PUT /topicos/{id}`
+- `DELETE /topicos/{id}`
 
-```
-src/
-├── main/
-│   ├── java/
-│   │   └── com/
-│   │       └── forum/
-│   │           └── hub/
-│   │               ├── config/
-│   │               ├── controller/
-│   │               ├── dto/
-│   │               ├── exception/
-│   │               ├── model/
-│   │               ├── repository/
-│   │               ├── security/
-│   │               └── service/
-│   └── resources/
-│       ├── db/
-│       │   └── migration/
-│       └── application.properties
-└── test/
-    └── java/
+## Exemplo de Requisição
+
+### Cadastro
+
+```json
+{
+  "name": "Victor Martins",
+  "email": "victor@email.com",
+  "password": "123456"
+}
 ```
 
-## Executando os Testes
+### Login
 
-```bash
-mvn test
+```json
+{
+  "email": "victor@email.com",
+  "password": "123456"
+}
 ```
 
-## Build do Projeto
+### Criação de tópico
 
-```bash
-mvn clean package
+```json
+{
+  "title": "Dúvida com Spring Security",
+  "message": "Como configurar autenticação stateless com JWT?",
+  "course": "Spring Boot"
+}
 ```
 
-O arquivo JAR será gerado em `target/forum-hub-0.0.1-SNAPSHOT.jar`
+## Regras Atuais do MVP
 
+- apenas usuários autenticados acessam rotas de tópicos;
+- atualização e exclusão só podem ser feitas pelo autor do tópico;
+- senhas são armazenadas com hash BCrypt;
+- tokens JWT são assinados com segredo configurável.
 
-## Licença
+## Próximos Passos
 
-Este projeto foi desenvolvido como parte do Challenge ONE - Oracle Next Education em parceria com a Alura.
+- adicionar testes de integração;
+- incluir refresh token;
+- permitir filtros por curso e autor;
+- implementar respostas HAL ou paginação mais rica;
+- adicionar perfil Docker para ambiente local.
+
+## Observação
+
+Este projeto foi fortalecido como base prática de estudo para o Challenge Java/Forum Hub. Ele serve tanto para portfólio quanto como ponto de partida para evoluções mais completas.
