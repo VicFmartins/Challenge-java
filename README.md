@@ -89,7 +89,7 @@ Cliente envia cadastro ou login
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/VicFmartins/Challenge-java.git
+git clone <url-do-repositorio>
 cd Challenge-java
 ```
 
